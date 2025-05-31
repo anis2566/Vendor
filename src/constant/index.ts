@@ -1,0 +1,30 @@
+export enum CATEGORY_STATUS {
+    ACTIVE = 'ACTIVE',
+    INACTIVE = 'INACTIVE',
+}
+
+export const defaultCategorySlugs = [
+    'electronics',
+    'clothing',
+    'home',
+    'beauty',
+    'sports',
+    'outdoors',
+    'health',
+    'automotive',
+    'toys',
+    'jewelry',
+    'food',
+    'bags',
+    'accessories',
+    'books',
+    'movies',
+    'music',
+    'games',
+    'tools',
+    'furniture',
+    'decor',
+    'lighting',
+    'gardening',
+    'pet',
+]
