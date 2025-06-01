@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { CategorySchema } from "@/schema/category";
 import { createTRPCRouter, protectedProcedure } from "../init";
 import { db } from "@/lib/db";
@@ -42,9 +44,44 @@ export const categoryRouter = createTRPCRouter({
             }
         }),
     getMany: protectedProcedure
-        .query(async () => {
-            const categories = await db.category.findMany()
-            console.log(categories)
-            return categories
+        .input(
+            z.object({
+                page: z.number(),
+                limit: z.number().min(1).max(100),
+                sort: z.string().nullish(),
+                search: z.string().nullish(),
+            })
+        )
+        .query(async ({ input }) => {
+            const { page, limit, sort, search } = input
+
+            const [categories, totalCount] = await Promise.all([
+                db.category.findMany({
+                    where: {
+                        ...(search && {
+                            name: {
+                                contains: search,
+                                mode: "insensitive"
+                            }
+                        })
+                    },
+                    orderBy: {
+                        createdAt: sort === "desc" ? "desc" : "asc"
+                    },
+                    take: limit,
+                    skip: (page - 1) * limit
+                }),
+                db.category.count({
+                    where: {
+                        ...(search && {
+                            name: {
+                                contains: search,
+                                mode: "insensitive"
+                            }
+                        })
+                    },
+                }),
+            ])
+            return { categories, totalCount }
         })
 })

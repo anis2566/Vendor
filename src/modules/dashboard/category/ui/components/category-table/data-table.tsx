@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+
 import {
     ColumnDef,
     flexRender,
@@ -19,22 +21,20 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useState } from "react"
+
 import { DataTablePagination } from "./pagination"
-import { DataTableViewOptions } from "./data-table-view-options"
 import { Filter } from "./filter"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    totalCount: number;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    totalCount
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -58,6 +58,10 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="border p-3 space-y-4">
+            <div>
+                <h1 className="text-xl font-semibold">Category List</h1>
+                <p className="text-sm text-muted-foreground">Manage category here</p>
+            </div>
             <Filter table={table} />
             <Table>
                 <TableHeader>
@@ -101,7 +105,7 @@ export function DataTable<TData, TValue>({
                     )}
                 </TableBody>
             </Table>
-            <DataTablePagination table={table} />
+            <DataTablePagination table={table} totalCount={totalCount} />
         </div>
     )
 }

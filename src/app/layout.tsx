@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import "./globals.css";
 
@@ -31,21 +32,23 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <TRPCReactProvider>
-        <html lang="en">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
+        <NuqsAdapter>
+          <html lang="en">
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-              {children}
-              <Toaster duration={3000} />
-            </ThemeProvider>
-          </body>
-        </html>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+                <Toaster duration={3000} />
+              </ThemeProvider>
+            </body>
+          </html>
+        </NuqsAdapter>
       </TRPCReactProvider>
     </AuthProvider>
   );

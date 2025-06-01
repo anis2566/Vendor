@@ -3,6 +3,7 @@ import Link from "next/link";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary"
+import { SearchParams } from "nuqs";
 
 import {
     Breadcrumb,
@@ -16,15 +17,24 @@ import {
 import { ContentLayout } from "@/modules/dashboard/ui/components/content-layout";
 import { CategoryList } from "@/modules/dashboard/category/ui/view/category-list";
 import { getQueryClient, trpc } from "@/trpc/server";
+import { categorySearchParams } from "@/modules/dashboard/category/filter/params";
 
 export const metadata: Metadata = {
     title: "Categories",
     description: "Category list",
 };
 
-const Categories = () => {
+interface Props {
+    searchParams: Promise<SearchParams>
+}
+
+const Categories = async ({ searchParams }: Props) => {
+    const params = await categorySearchParams(searchParams)
+
     const queryClient = getQueryClient()
-    void queryClient.prefetchQuery(trpc.category.getMany.queryOptions())
+    void queryClient.prefetchQuery(trpc.category.getMany.queryOptions({
+        ...params
+    }))
 
     return (
         <ContentLayout navChildren={<NavChildren />}>
