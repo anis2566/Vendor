@@ -7,7 +7,15 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "fc6u315efb.ufs.sh",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

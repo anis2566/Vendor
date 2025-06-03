@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
+
 import { AuthProvider } from "@/providers/clerk-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/client";
+import { ModalProvider } from "@/providers/modal-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +48,8 @@ export default function RootLayout({
               >
                 {children}
                 <Toaster duration={3000} />
+                <ModalProvider />
+                <NextTopLoader showSpinner={false} />
               </ThemeProvider>
             </body>
           </html>

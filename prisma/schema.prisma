@@ -18,6 +18,23 @@ model User {
   status        String          @default("Pending")
   phone         String?
 
+  store         Store?
+
+  orders        Order[]
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+}
+
+model Brand {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  image         String?
+  status        String          @default("Active")
+
+  products      Product[]
+
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now()) @updatedAt
 }
@@ -26,10 +43,97 @@ model Category {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   description   String?
-  image         String?
-  slug          String[]        @default([])
-  isActive      Boolean         @default(false)
+  image         String?  
+  status        String          @default("Active")
+
+  products      Product[]       
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now()) @updatedAt
+}
+
+model Product {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  variants    ProductVariant[]
+  stock       Int       @default(0)
+  totalSold   Int       @default(0)
+  status      String    @default("Active")
+  rating      Float     @default(0)
+
+  brandId     String    @db.ObjectId
+  brand       Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  categoryId  String    @db.ObjectId
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  storeId     String?    @db.ObjectId
+  store       Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ProductVariant {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  name          String      
+  price         Int         
+  discount      Int         
+  stock         Int         @default(0)
+  size          String?
+  color         String?
+  imageUrl      String[]     
+
+  productId     String      @db.ObjectId
+  product       Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  orderIds      String[]    @db.ObjectId
+  orders        Order[]     @relation(fields: [orderIds], references: [id])
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Store {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  phone         String
+  description   String?
+  address       String
+  image         String
+  status        String      @default("Inactive")
+
+  userId        String      @db.ObjectId  @unique
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  products      Product[]
+  orders        Order[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  phone         String
+  district      String
+  address       String
+  total         Int
+  subTotal      Int
+  shippingFee   Int
+  status        String      @default("Pending")
+
+  storeId       String?     @db.ObjectId
+  store         Store?      @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  variantIds    String[]    @db.ObjectId
+  variants      ProductVariant[]  @relation(fields: [variantIds], references: [id])    
+
+  userId        String      @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
