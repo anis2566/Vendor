@@ -59,8 +59,8 @@ export const AccountStatus = ({ userId }: Props) => {
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-gray-400" />
             <span>
-              Last updated: {format(new Date(), "dd MMM yyyy")} -{" "}
-              {format(new Date(), "hh:mm a")}
+              Last updated: {format(new Date(store.updatedAt), "dd MMM yyyy")} -{" "}
+              {format(new Date(store.updatedAt), "hh:mm a")}
             </span>
           </div>
         </div>
