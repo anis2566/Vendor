@@ -22,13 +22,7 @@ export const metadata: Metadata = {
 const Dashboard = async () => {
   return (
     <ContentLayout navChildren={<NavChildren />}>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<p>Loading</p>}>
-          <ErrorBoundary fallback={<p>Error</p>}>
             <VendorDashboard />
-          </ErrorBoundary>
-        </Suspense>
-      </HydrationBoundary>
     </ContentLayout>
   );
 };
