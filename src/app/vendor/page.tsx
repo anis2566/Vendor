@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/breadcrumb";
 
 import { ContentLayout } from "@/modules/dashboard/ui/components/content-layout";
-import { getQueryClient, trpc } from "@/trpc/server";
 import { VendorDashboard } from "@/modules/vendor/ui/view/dashboard";
 
 export const metadata: Metadata = {
@@ -21,9 +20,6 @@ export const metadata: Metadata = {
 };
 
 const Dashboard = async () => {
-  const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.order.vendorRecent.queryOptions());
-
   return (
     <ContentLayout navChildren={<NavChildren />}>
       <HydrationBoundary state={dehydrate(queryClient)}>
